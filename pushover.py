@@ -8,7 +8,6 @@ import notify2
 import requests
 import os
 import sys
-import stat
 import getpass
 import websocket
 import threading
@@ -65,7 +64,8 @@ if (c['deviceid'] == ''):
     config.read(config_file)
     c = config['pushover']
 
-def geticon(url):
+def geticon(icon):
+    url = 'https://api.pushover.net/icons/%s.png' % (icon)
     icon_size = [int(n) for n in c['icon_size'].split(',')]
     cache_dir = os.path.join(xdg_cache_home, 'pushover-libnotify', 'icons')
     if not os.path.isdir(cache_dir):
@@ -102,11 +102,7 @@ def notify(data):
     title = data['app']
     if data['title'] != '':
         title += ' - '+data['title']
-    if data['icon'] != 'default':
-        icon = data['icon']
-    else:
-        icon = 'https://api.pushover.net/icons/pushover.png'
-    icon = geticon(icon)
+    icon = geticon(data['icon'])
     n = notify2.Notification(
             title,
             data['message'],
@@ -137,5 +133,3 @@ ws = websocket.WebSocketApp(
 
 ws.on_open = on_open
 ws.run_forever()
-
-sys.exit()
