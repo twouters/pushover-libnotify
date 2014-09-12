@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup,find_packages
 
 setup(
     name="pushover-libnotify",
@@ -26,5 +26,10 @@ setup(
         "Development Status :: 3 - Alpha",
         "Natural Language :: English",
         ],
-    packages=["pushover-libnotify"],
+    packages=find_packages(),
+    entry_points = {
+        'console_scripts': [
+            'pushover-libnotify = pushover_libnotify:main'
+            ]
+        },
     )
